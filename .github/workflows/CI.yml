@@ -39,6 +39,12 @@ jobs:
         run: ls -R
       - name: Move in artifact
         run: cd artifacts/artifacts
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          check-latest: true
+          cache: yarn
       - name: Publish
         shell: bash
         run: |
