@@ -45,16 +45,17 @@ jobs:
       - name: Files
         run: ls -R
       - name: Publish
-        working-directory: artifacts
         shell: bash
         run: |
           if git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+$";
           then
+            ls -R
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
             wasm-pack publish
           else
             echo "Not a release, skipping publish"
           fi
+          working-directory: ./artifacts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
