@@ -36,6 +36,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: artifacts
+          path: artifacts
       - name: Download wasm-pack
         uses: jetli/wasm-pack-action@v0.4.0
         with:
