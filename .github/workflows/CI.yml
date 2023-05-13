@@ -36,20 +36,22 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           path: artifacts
-      - name: Files
-        run: ls -R
       - name: Move in artifact
         run: cd artifacts/artifacts
       - name: Download wasm-pack
         uses: jetli/wasm-pack-action@v0.4.0
         with:
           version: 'latest'
+
+      - name: Files
+        run: ls -R
       - name: Publish
         shell: bash
         run: |
           if git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+$";
           then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+            wasm-pack build
             wasm-pack publish
           else
             echo "Not a release, skipping publish"
