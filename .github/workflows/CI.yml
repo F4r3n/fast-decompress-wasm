@@ -20,7 +20,7 @@ jobs:
         with:
           version: 'latest'
       - name: Build package
-        run: wasm-pack build
+        run: wasm-pack build --scope gkotulski
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
@@ -35,9 +35,7 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v3
         with:
-          path: artifacts
-      - name: Move in artifact
-        run: cd artifacts/artifacts
+          name: artifacts
       - name: Download wasm-pack
         uses: jetli/wasm-pack-action@v0.4.0
         with:
@@ -46,12 +44,12 @@ jobs:
       - name: Files
         run: ls -R
       - name: Publish
+        working-directory: artifacts
         shell: bash
         run: |
           if git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+$";
           then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            wasm-pack build
             wasm-pack publish
           else
             echo "Not a release, skipping publish"
