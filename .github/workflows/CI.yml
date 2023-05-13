@@ -38,7 +38,7 @@ jobs:
       - name: Files
         run: ls -R
       - name: Move in artifact
-        run: cd artifacts
+        run: cd artifacts/artifacts
       - name: Publish
         shell: bash
         run: |
