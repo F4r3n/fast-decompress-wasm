@@ -39,23 +39,17 @@ jobs:
         run: ls -R
       - name: Move in artifact
         run: cd artifacts/artifacts
-      - name: Setup node
-        uses: actions/setup-node@v3
+      - name: Download wasm-pack
+        uses: jetli/wasm-pack-action@v0.4.0
         with:
-          node-version: 18
-          check-latest: true
-          cache: yarn
+          version: 'latest'
       - name: Publish
         shell: bash
         run: |
           if git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+$";
           then
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            npm publish --access public
-          elif git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+";
-          then
-            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            npm publish --tag next --access public
+            wasm-pack publish
           else
             echo "Not a release, skipping publish"
           fi
