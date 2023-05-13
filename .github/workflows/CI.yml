@@ -24,19 +24,29 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
-          name: artifacts
+          name: pkg
           path: ./pkg/
+      - name: Upload target
+        uses: actions/upload-artifact@v3
+        with:
+          name: target
+          path: ./target/
   publish:
     needs: build
     name: Publish
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Download all artifacts
+      - name: Download pkg
         uses: actions/download-artifact@v3
         with:
-          name: artifacts
-          path: artifacts
+          name: pkg
+          path: ./pkg
+      - name: Download target
+        uses: actions/download-artifact@v3
+        with:
+          name: target
+          path: ./target
       - name: Download wasm-pack
         uses: jetli/wasm-pack-action@v0.4.0
         with:
@@ -55,7 +65,6 @@ jobs:
           else
             echo "Not a release, skipping publish"
           fi
-        working-directory: ./artifacts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
