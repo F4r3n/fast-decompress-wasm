@@ -61,7 +61,7 @@ jobs:
           then
             ls -R
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-            wasm-pack publish
+            wasm-pack publish --access public
           else
             echo "Not a release, skipping publish"
           fi
